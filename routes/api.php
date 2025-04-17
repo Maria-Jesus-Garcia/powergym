@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\EntrenamientoController;
 
 
 Route::prefix('v1')->group(function() {
@@ -27,6 +28,15 @@ Route::prefix('v1')->group(function() {
         //Route::post('/users', [UserController::class, 'store']); ya tenemos 'register'
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'delete']);
+
+        //::entrenamiento
+        Route::get('/entrenamientos', [EntrenamientoController::class, 'index']);
+        Route::get('/entrenamientos/{id}', [EntrenamientoController::class, 'show']);
+        Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
+        Route::put('/entrenamiento/{id}', [EntrenamientoController::class, 'update']);
+        Route::delete('/entrenamiento/{id}', [EntrenamientoController::class, 'delete']);
+
+
         //::ejercicios
         //Route::get('')
 
