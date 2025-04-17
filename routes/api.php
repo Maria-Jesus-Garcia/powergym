@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\UserController;
 
 
 Route::prefix('v1')->group(function() {
@@ -15,10 +16,17 @@ Route::prefix('v1')->group(function() {
     Route::group(['middleware'=> 'auth:sanctum'], function(){
         //::auth
         Route::post('/auth/logout', [AuthController::class, 'logout']);
-        //ver usuario autenticado
+        //ver usuario autenticado.... tengo que ver si me compensa dejarlo o no
         Route::get('/user', function (Request $request){
             return $request->user();
         });
+
+        //::usuarios
+        Route::get ('/users', [UserController::class, 'index']);
+        Route::get ('/users/{id}', [UserController::class, 'show']);
+        Route::post('/user', [UserController::class, 'store']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'delete']);
 
 
     });
