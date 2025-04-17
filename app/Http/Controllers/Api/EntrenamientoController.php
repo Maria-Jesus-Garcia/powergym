@@ -33,8 +33,19 @@ class EntrenamientoController extends Controller
             'series'=> 'required|integer',
             'repeticiones'=> 'required|integer',
             'date'=> 'required|date',
+            'ejercicios'=>'array', 
+            'ejercicios.*'=> 'exists:ejercicios,id',
         ]);
-        $entrenamiento= Entrenamiento::create($request->all());
+        $entrenamiento= Entrenamiento::create($request->only([
+            'nombre', 'user_id', 'series', 'repeticiones', 'date'
+        ]));
+
+        //Asociar los ejercicios con el entreno
+        if($request->has('ejercicios')){
+            $entrenamiento->ejercicios()->attach($request->input('ejercicios'));
+        }
+
+
         return response()->json($entrenamiento, 201);
     }
 
@@ -52,9 +63,21 @@ class EntrenamientoController extends Controller
             'series'=> 'sometimes|required|integer',
             'repeticiones'=> 'sometimes|required|integer',
             'date'=> 'sometimes|required|date',
+            'ejercicios'=> 'array',
+            'ejercicios.*'=> 'exists:ejercicios,id',
         ]);
+
         //solo se actualiza los campos que se pasen
-        $entrenamiento->update($request->all());
+        $entrenamiento->update($request->only([
+            'nombre', 'series', 'repeticiones', 'date'
+
+        ]));
+        // Si se pasan ejercicios, actualizamos la relación
+        if ($request->has('ejercicios')) {
+        // Primero eliminamos la relación existente
+            $entrenamiento->ejercicios()->sync($request->input('ejercicios'));
+        }
+
         return response()->json($entrenamiento, 200);
     }
 

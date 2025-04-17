@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\GeneralController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\EntrenamientoController;
+use App\Http\Controllers\Api\EjercicioController;
 
 
 Route::prefix('v1')->group(function() {
@@ -33,12 +34,15 @@ Route::prefix('v1')->group(function() {
         Route::get('/entrenamientos', [EntrenamientoController::class, 'index']);
         Route::get('/entrenamientos/{id}', [EntrenamientoController::class, 'show']);
         Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
-        Route::put('/entrenamiento/{id}', [EntrenamientoController::class, 'update']);
-        Route::delete('/entrenamiento/{id}', [EntrenamientoController::class, 'delete']);
-
+        Route::put('/entrenamientos/{id}', [EntrenamientoController::class, 'update']);
+        Route::delete('/entrenamientos/{id}', [EntrenamientoController::class, 'delete']);
 
         //::ejercicios
-        //Route::get('')
+        Route::get('/ejercicios', [EjercicioController::class, 'index']);
+        Route::get('/ejercicios/{id}', [EjercicioController::class, 'show']);
+        Route::post('/ejercicios', [EjercicioController::class, 'store']);
+        Route::put('/ejercicios/{id}', [EjercicioController::class, 'update']);
+        Route::delete('/ejercicios/{id}', [EjercicioController::class, 'delete']);
 
 
     });
