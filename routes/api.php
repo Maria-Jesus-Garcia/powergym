@@ -24,9 +24,11 @@ Route::prefix('v1')->group(function() {
         //::usuarios
         Route::get ('/users', [UserController::class, 'index']);
         Route::get ('/users/{id}', [UserController::class, 'show']);
-        Route::post('/user', [UserController::class, 'store']);
+        //Route::post('/users', [UserController::class, 'store']); ya tenemos 'register'
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'delete']);
+        //::ejercicios
+        //Route::get('')
 
 
     });
