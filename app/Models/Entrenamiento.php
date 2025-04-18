@@ -11,9 +11,9 @@ class Entrenamiento extends Model
     protected $guarded = [];
    
 
-    public function ejercicio()
+    public function ejercicios()
     {
-        return $this->belongsToMany(Ejercicio::class); // belongsToMany establece relacion de muchos a muchos
+        return $this->belongsToMany(Ejercicio::class, 'entrenamiento_ejercicio'); // belongsToMany establece relacion de muchos a muchos
     }
     public function user()
     {

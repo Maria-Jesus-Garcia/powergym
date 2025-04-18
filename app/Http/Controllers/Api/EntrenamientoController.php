@@ -13,6 +13,7 @@ class EntrenamientoController extends Controller
         $entrenamientos= Entrenamiento::all();
         return response()->json($entrenamientos, 200);
     }
+
     //Mostrar un entrenemaiento en específico
     public function show($id){ 
 
@@ -22,7 +23,6 @@ class EntrenamientoController extends Controller
             return response()->json(['error'=> 'Entrenamiento no encontrado'], 404);
         }
         return response()->json($entrenamiento, 200);
-    
     }
 
     //Crear un nuevo entrenamiento
@@ -36,16 +36,18 @@ class EntrenamientoController extends Controller
             'ejercicios'=>'array', 
             'ejercicios.*'=> 'exists:ejercicios,id',
         ]);
+        //crear el entrenamiento
         $entrenamiento= Entrenamiento::create($request->only([
             'nombre', 'user_id', 'series', 'repeticiones', 'date'
         ]));
 
         //Asociar los ejercicios con el entreno
         if($request->has('ejercicios')){
-            $entrenamiento->ejercicios()->attach($request->input('ejercicios'));
+            $entrenamiento->ejercicios()->attach($request->input('ejercicios'), [
+                'series'=>$request->series,
+                'repeticiones'=> $request->repeticiones,
+            ]);
         }
-
-
         return response()->json($entrenamiento, 201);
     }
 

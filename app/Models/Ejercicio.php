@@ -13,6 +13,6 @@ class Ejercicio extends Model
 
     public function entrenamientos()
     {
-        return $this->belongsToMany(Entrenamiento::class);
+        return $this->belongsToMany(Entrenamiento::class, 'enetrenamiento_ejercicio');
     }
 }
