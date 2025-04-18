@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\EntrenamientoController;
 use App\Http\Controllers\Api\EjercicioController;
+use App\Http\Controllers\ProgresoController;
 
 
 Route::prefix('v1')->group(function() {
@@ -43,6 +44,13 @@ Route::prefix('v1')->group(function() {
         Route::post('/ejercicios', [EjercicioController::class, 'store']);
         Route::put('/ejercicios/{id}', [EjercicioController::class, 'update']);
         Route::delete('/ejercicios/{id}', [EjercicioController::class, 'delete']);
+
+        //::progresos
+        Route::get('/progresos',[ProgresoController::class, 'index']);
+        Route::get('/progresos/{id}',[ProgresoController::class, 'show']);
+        Route::post('/progresos', [ProgresoController::class, 'store']);
+        Route::put('/progresos/{id}', [ProgresoController::class, 'update']);
+        Route::delete('/progresos/{id}', [ProgresoController::class, 'delete']);
 
 
     });

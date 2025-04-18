@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('progresos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('peso_actual', 8,2)->nullable();
-            $table->decimal('peso_objetivo', 8,2)->nullable();
-            $table->integer('edad')->nullable();
-            $table->timestamp('fecha')->default(now()); //fecha del registro
+            $table->unsignedBigInteger('usuario_id'); //relacion con usuario
+            $table->float('peso_actual');
+            $table->float('peso_objetivo');
+            $table->date('fecha');
             $table->timestamps();
+            $table->foreign('usuario_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

@@ -54,6 +54,6 @@ class User extends Authenticatable
         return $this->hasOne(Entrenamiento::class); //un usuario tiene un entrenamiento
     }
     public function progresos(){
-        return $this->hasMany(Progreso::class); //un usuario tiene muchos progresos
+        return $this->hasMany(Progreso::class, 'usuario_id'); //un usuario tiene muchos progresos
     }
 }
