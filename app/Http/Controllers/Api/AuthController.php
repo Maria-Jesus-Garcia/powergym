@@ -23,14 +23,14 @@ class AuthController extends Controller
         
 
         $validator= Validator::make($request->all(), [
-            'name'=>'required|string|max:255',
+            'nombre'=>'required|string|max:255',
             
             //'apellido'=>'required|string|max:255',
             'email'=>'required|email|unique:users,email',
             'edad'=>'nullable|integer',
             'peso_actual'=>'nullable|numeric',
             'peso_objetivo'=>'nullable|numeric',
-            'password'=>'required|string|min:6|confirmed',
+            'contraseña'=>'required|string|min:6|confirmed',
 
         ]);
 
@@ -44,13 +44,13 @@ class AuthController extends Controller
 
         // Crear el nuevo usuario
         $user = User::create([
-            'name' => $request->name,
+            'nombre' => $request->nombre,
             //'apellido' => $request->apellido,
             'email' => $request->email,
             'edad' => $request->edad,
             'peso_actual' => $request->peso_actual,
             'peso_objetivo' => $request->peso_objetivo,
-            'password' => Hash::make($request->password), // Hashear la contraseña
+            'contraseña' => Hash::make($request->contraseña), // Hashear la contraseña
         ]);
 
         // Responder con un mensaje de éxito
@@ -67,7 +67,7 @@ class AuthController extends Controller
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'contraseña' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -77,7 +77,7 @@ class AuthController extends Controller
     // Verificar credenciales con el guard api
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (!$user || !Hash::check($request->contraseña, $user->contraseña)) {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
 

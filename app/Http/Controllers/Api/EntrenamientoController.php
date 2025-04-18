@@ -29,16 +29,16 @@ class EntrenamientoController extends Controller
     public function store(Request $request){
         $request->validate([
             'nombre'=> 'required|string|max:255',
-            'user_id'=> 'required|exists:users,id',
+            'usuario_id'=> 'required|exists:users,id',
             'series'=> 'required|integer',
             'repeticiones'=> 'required|integer',
-            'date'=> 'required|date',
+            'fecha'=> 'required|date',
             'ejercicios'=>'array', 
             'ejercicios.*'=> 'exists:ejercicios,id',
         ]);
         //crear el entrenamiento
         $entrenamiento= Entrenamiento::create($request->only([
-            'nombre', 'user_id', 'series', 'repeticiones', 'date'
+            'nombre', 'usuario_id', 'series', 'repeticiones', 'fecha'
         ]));
 
         //Asociar los ejercicios con el entreno
@@ -64,14 +64,14 @@ class EntrenamientoController extends Controller
             'nombre'=> 'sometimes|required|string|max:255',
             'series'=> 'sometimes|required|integer',
             'repeticiones'=> 'sometimes|required|integer',
-            'date'=> 'sometimes|required|date',
+            'fecha'=> 'sometimes|required|date',
             'ejercicios'=> 'array',
             'ejercicios.*'=> 'exists:ejercicios,id',
         ]);
 
         //solo se actualiza los campos que se pasen
         $entrenamiento->update($request->only([
-            'nombre', 'series', 'repeticiones', 'date'
+            'nombre', 'series', 'repeticiones', 'fecha'
 
         ]));
         // Si se pasan ejercicios, actualizamos la relación
