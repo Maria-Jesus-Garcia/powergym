@@ -24,7 +24,7 @@ const AuthUser = ()=> {
         setToken(token);
     }
 
-    const getlogout= ()=> {
+    const getLogout= ()=> {
         sessionStorage.clear();
         navigate('/');
     }
@@ -36,7 +36,7 @@ const AuthUser = ()=> {
         user,
         getToken,
         getUser,
-        getlogout
+        getLogout
     };
     
 }
