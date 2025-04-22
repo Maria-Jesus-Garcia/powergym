@@ -7,6 +7,7 @@
 
         <title>POWERGYM LARAVEL-REACT</title>
         
+        @viteReactRefresh 
         @vite("resources/js/app.js")
     </head>
     <body>

@@ -2,12 +2,28 @@ import React from 'react'
 import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const App= ()=> {
+import LayoutPublic from './layouts/LayoutPublic';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import PageHome from './pagepublic/PageHome';
+import Login from './pageauth/Login';
+import Register from './pageauth/Register';
+import Dashboard from './pageauth/Dashboard';
+
+const App = () => {
     return(
-        <div>
-            App POWERGYM
-            <button className='btn btn-primary'>BOTÓN</button>
-        </div>
+        <Router>
+            <Routes>
+                <Route path="/" element= {<LayoutPublic/>}>
+                    <Route index element= {<PageHome/>} />
+                    <Route path='/login' element={<Login/>}/>
+                    <Route path= '/register' element={<Register/>}/>
+                    {/* <Route path= '/logout' element={<Logout/>}/> */}
+                    <Route path= '/dashboard' element={<Dashboard/>}/>
+                </Route>               
+            </Routes>
+        </Router>
     )
 }
 
