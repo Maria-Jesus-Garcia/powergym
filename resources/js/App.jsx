@@ -10,6 +10,8 @@ import PageHome from './pagepublic/PageHome';
 import Login from './pageauth/Login';
 import Register from './pageauth/Register';
 import Dashboard from './pageauth/Dashboard';
+import EntrenamientosAll from './pageauth/EntrenamientosAll';
+import EntrenamientosStore from './pageauth/EntrenamientosStore';
 
 const App = () => {
     return(
@@ -19,8 +21,10 @@ const App = () => {
                     <Route index element= {<PageHome/>} />
                     <Route path='/login' element={<Login/>}/>
                     <Route path= '/register' element={<Register/>}/>
-                    {/* <Route path= '/logout' element={<Logout/>}/> */}
                     <Route path= '/dashboard' element={<Dashboard/>}/>
+                    <Route path= '/entrenamientos' element={<EntrenamientosAll/>}/>
+                    <Route path= '/entrenamientos/create' element= {<EntrenamientosStore/>}/>
+
                 </Route>               
             </Routes>
         </Router>

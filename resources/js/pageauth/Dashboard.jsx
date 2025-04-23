@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
+import Sidebar from '../components/Sidebar';
 
 
 
 
-const Dashboard = () => {
+const Dashboard = ({ children }) => {
     return (
-        <div className="container mt-5">
-            <h1 className="mb-4">¡Bienvenida a PowerGym! 💪</h1>
-            <p>Aquí podrás ver tus entrenamientos, progreso, y mucho más.</p>
+        <div className="d-flex">
+            <Sidebar />
+            <div className="flex-grow-1 p-4">
+                {children}
+            </div>
         </div>
     );
 };

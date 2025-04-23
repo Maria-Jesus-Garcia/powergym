@@ -56,13 +56,7 @@ Route::prefix('v1')->group(function() {
     });
 
 
-/*
-    // Rutas públicas
-    Route::post('/auth/register', function(Request $request) {
-        return response()->json(['message' => 'Registro correcto']);
-    });
-*/
-    // Otras rutas públicas o privadas que quieras agregar
+
 });
 
 
