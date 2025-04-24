@@ -17,7 +17,14 @@ const EntrenamientosStore = () => {
     useEffect(() =>{
         const fetchEjercicios = async()=> {
         try{
-            const response = await fetch ('http://localhost:8000/api/v1/ejercicios');
+            const token = localStorage.getItem('token');//añado esto
+
+            const response = await fetch ('http://localhost:8000/api/v1/ejercicios', {
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json'
+                }
+            });
             if(!response.ok){
                 console.error('Error en la API', response.status);
                 return;
@@ -76,7 +83,7 @@ const EntrenamientosStore = () => {
         //2)Relacionar ejercicios (tabla pivote)
             await Promise.all(
                 ejerciciosSeleccionados.map(ejercicio => 
-                    fetch('http://localhost:8000/api/v1/entrenamientos/${entrenamientoData}/ejercicios', {
+                    fetch(`http://localhost:8000/api/v1/entrenamientos/${entrenamientosData}/ejercicios`, {
                         method: 'POST',
                         headers: {
                             'Content-type':'application/json',

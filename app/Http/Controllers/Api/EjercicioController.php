@@ -9,7 +9,13 @@ use App\Models\Ejercicio;
 class EjercicioController extends Controller
 {
     public function index(){
-        return response()->json(Ejercicio::all(), 200);
+        // return response()->json(Ejercicio::all(), 200); //solo tenia esto
+        try {
+            $ejercicios = Ejercicio::all();
+            return response()->json($ejercicios);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error al obtener los ejercicios'], 500);
+        }
 
     }
 
