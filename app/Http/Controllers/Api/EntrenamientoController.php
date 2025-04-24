@@ -27,27 +27,24 @@ class EntrenamientoController extends Controller
 
     //Crear un nuevo entrenamiento
     public function store(Request $request){
-        $request->validate([
+        $validated= $request->validate([ //aqui tenia $request->validate([
             'nombre'=> 'required|string|max:255',
-            'usuario_id'=> 'required|exists:users,id',
+            'usuario_id'=> 'nullable|exists:users,id',//cambié esto por nullable para probar crear rutina
             'series'=> 'required|integer',
             'repeticiones'=> 'required|integer',
             'fecha'=> 'required|date',
-            'ejercicios'=>'array', 
-            'ejercicios.*'=> 'exists:ejercicios,id',
+            'ejercicios'=>'required|array', 
+            'ejercicios.*.ejercicio_id'=> 'required|exists:ejercicios,id',
+            'ejercicios.*.series' => 'integer|min:1', //añado esto
+            'ejercicios.*.repeticiones' => 'integer|min:1' //añado esto
         ]);
         //crear el entrenamiento
-        $entrenamiento= Entrenamiento::create($request->only([
-            'nombre', 'usuario_id', 'series', 'repeticiones', 'fecha'
-        ]));
-
-        //Asociar los ejercicios con el entreno
-        if($request->has('ejercicios')){
-            $entrenamiento->ejercicios()->attach($request->input('ejercicios'), [
-                'series'=>$request->series,
-                'repeticiones'=> $request->repeticiones,
-            ]);
+        $datos = $request->only(['nombre', 'series', 'repeticiones', 'fecha']);
+        if ($request->filled('usuario_id')) {
+            $datos['usuario_id'] = $request->usuario_id;
         }
+        $entrenamiento = Entrenamiento::create($datos);
+
         return response()->json($entrenamiento, 201);
     }
 
@@ -93,6 +90,21 @@ class EntrenamientoController extends Controller
 
         $entrenamiento->delete();
         return response()->json(['message'=>'Entrenamiento eliminado'], 200);
+    }
+
+    public function agregarEjercicio(Request $request, Entrenamiento $entrenamiento){ //añadido despues
+        $validated = $request->validate([
+            'ejercicio_id' => 'required|exists:ejercicios,id',
+            'series' => 'integer',
+            'repeticiones' => 'integer'
+        ]);
+
+        $entrenamiento->ejercicios()->attach($validated['ejercicio_id'], [
+            'series' => $validated['series'],
+            'repeticiones' => $validated['repeticiones']
+        ]);
+
+        return response()->json(['message' => 'Ejercicio agregado']);
     }
 
 

@@ -50,7 +50,7 @@ class User extends Authenticatable
             'contraseña' => 'hashed',
         ];
     }
-    public function entrenamiento(){
+    public function entrenamientos(){
         return $this->hasOne(Entrenamiento::class); //un usuario tiene un entrenamiento
     }
     public function progresos(){

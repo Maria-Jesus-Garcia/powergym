@@ -37,6 +37,10 @@ Route::prefix('v1')->group(function() {
         Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
         Route::put('/entrenamientos/{id}', [EntrenamientoController::class, 'update']);
         Route::delete('/entrenamientos/{id}', [EntrenamientoController::class, 'delete']);
+        // añadido despues
+        Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
+        Route::post('/entrenamientos/{entrenamiento}/ejercicios',
+        [EntrenamientoController::class, 'agregarEjercicio']);
 
         //::ejercicios
         Route::get('/ejercicios', [EjercicioController::class, 'index']);

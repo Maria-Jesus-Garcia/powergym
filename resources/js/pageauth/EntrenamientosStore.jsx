@@ -22,8 +22,9 @@ const EntrenamientosStore = () => {
             const response = await fetch ('http://localhost:8000/api/v1/ejercicios', {
                 headers:{
                     'Authorization': `Bearer ${token}`,
-                    'Accept': 'application/json'
-                }
+                    'Accept': 'application/json',
+                },
+                credentials: 'include' //añado esto 2
             });
             if(!response.ok){
                 console.error('Error en la API', response.status);
@@ -35,11 +36,6 @@ const EntrenamientosStore = () => {
         }catch (error) {
             console.error('Error al obtener ejercicios', error);
         }
-        // const fetchEjercicios = async () => {
-            //     const response = await fetch('/api/ejercicios');
-            //     const data = await response.json();
-            //     setEjerciciosDisponibles(data);
-            //  };
     }   
     fetchEjercicios();
     }, []);
@@ -59,49 +55,104 @@ const EntrenamientosStore = () => {
         e.preventDefault();
         //1)crear el entrenamiento
         const token = localStorage.getItem('token');
+        if (!token){
+            alert('Debes iniciar sesión primero');
+            window.location.href = '/login';   //añado estas dos lineas
+            return;
+        }
         //console.log("TOKEN ACTUAL", token);
         try{
+
+            await fetch('http://localhost:8000/sanctum/csrf-cookie', { credentials: 'include'}); //añado esto2
+
+            // 2) Preparar datos
+            const user_id = localStorage.getItem('user_id');
+            // const user_id = Number(localStorage.getItem('user_id')); // Convertir a número
+            // if (!user_id) {
+            //     throw new Error('No se encontró ID de usuario');
+            // }
+
+        const dataToSend = {
+            nombre: nombreEntrenamiento,
+           //usuario_id: user_id, // Asegurar que es número
+            series: Number(series),
+            repeticiones: Number(repeticiones),
+            fecha: new Date(fechaSeleccionada).toISOString().split('T')[0], // Formato YYYY-MM-DD
+            ejercicios: ejerciciosSeleccionados.map(ejercicio => ({
+                ejercicio_id: Number(ejercicio.ejercicio_id),
+                series: Number(ejercicio.series),
+                repeticiones: Number(ejercicio.repeticiones)
+            }))
+        };
+
+        console.log('Datos a enviar:', dataToSend); // Para debug
+
+
 
             const entrenamientosResponse = await fetch('http://localhost:8000/api/v1/entrenamientos',{
              method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`,//cambio lo de abajo por esto2 
+                    //'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Accept': 'application/json' //añado esto y probar sin esto tb2
                 },
-                body: JSON.stringify({
-                    nombre: nombreEntrenamiento,
-                    usuario_id: localStorage.getItem('user_id'),
-                    series: series,
-                    repeticiones: repeticiones,
-                    fecha: fechaSeleccionada,
-                    ejercicios: ejerciciosSeleccionados.map(e => e.ejercicio_id),
-                })
+                credentials: 'include',
+                body: JSON.stringify(dataToSend) 
+                                   
             })
+    
+            //añado e´siguiente if
+            if (!entrenamientosResponse.ok){
+                const errorData =await entrenamientosResponse.json();
+                console.error('Error detallado:', errorData);
+                throw new Error(errorData.message || 'Error al crear entrenamiento');
+            }
+
+
             const entrenamientosData = await entrenamientosResponse.json();
             console.log('Entrenamiento creado:', entrenamientosData);
 
-        //2)Relacionar ejercicios (tabla pivote)
-            await Promise.all(
-                ejerciciosSeleccionados.map(ejercicio => 
-                    fetch(`http://localhost:8000/api/v1/entrenamientos/${entrenamientosData}/ejercicios`, {
+        //2)Relacionar ejercicios (tabla pivote)        
+
+            //await Promise.all(
+                const ejerciciosPromises = ejerciciosSeleccionados.map(ejercicio => {
+                    
+                    return fetch(`http://localhost:8000/api/v1/entrenamientos/${entrenamientosData.id}/ejercicios`, {
                         method: 'POST',
                         headers: {
                             'Content-type':'application/json',
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            'Authorization': `Bearer ${token}` ///lo mismo que arriba pruebo con este en vez con el de abajo
+                            //'Authorization': `Bearer ${localStorage.getItem('token')}`
                         },
+                        credentials: 'include',
                         body: JSON.stringify({
                             entrenamiento_id: entrenamientosData.id,
-                            ejercicios_id: ejercicio.ejercicio_id,
+                            ejercicio_id: ejercicio.ejercicio_id,
                             series: ejercicio.series,
                             repeticiones: ejercicio.repeticiones
                         })
                     })
-                )
-            );
-            alert('Entrenamiento guardado');
-        }catch(error) {
-            console.error ('Error al guardar el entrenamiento', error)
-        }
+                })
+            //);
+            //     alert('Entrenamiento guardado');
+            // }catch(error) {
+            //     console.error ('Error al guardar el entrenamiento', error)
+            // }
+                const ejerciciosResponses = await Promise.all(ejerciciosPromises);
+                for (const response of ejerciciosResponses) {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Error al agregar ejercicio:', errorText);
+                    }
+                }
+                
+
+                alert('Entrenamiento guardado correctamente');
+            } catch (error) { //añado este catch
+                console.error('Error al guardar el entrenamiento:', error);
+                alert(`Error al guardar: ${error.message}`);
+            }
     }
 
 
