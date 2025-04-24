@@ -11,23 +11,26 @@ const Login= ()=> {
 
     const submitLogin= async(e)=> {
         e.preventDefault();
-        await axios.get('/sanctum/csrf-cookie').then((response)=>{
+        await axios.get('/sanctum/csrf-cookie').then(() => {
+        //((response)=>
+        
             Config.getLogin({email, contraseña})
-            .then(({data})=>{
-                console.log("respuesta del login", data);
-                sessionStorage.setItem("token", data.token);
-                sessionStorage.setItem("usuario", JSON.stringify(data.user));
+                .then(({data})=>{
+                    console.log("respuesta del login", data);
+                    localStorage.setItem("token", data.token);//quité response aqui
+                    localStorage.setItem("user", JSON.stringify(data.user));
 
-            navigate("/dashboard");
+                navigate("/dashboard");
             })
             .catch((error)=>{
                 console.error("Error al hacer login:", error);
-            });
-
-        })
+                //setMessage("Error al iniciar sesión");
+            }); 
+        });        
 
     }
-         return (
+  
+        return (
             <div className='container'>
                 <div className="row justify-content-center">
                     <div className="col-sm-4">
@@ -52,5 +55,5 @@ const Login= ()=> {
                 </div>
             </div>
         )
-}
+    }
 export default Login;

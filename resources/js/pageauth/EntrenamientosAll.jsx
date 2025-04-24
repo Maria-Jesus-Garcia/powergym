@@ -11,7 +11,8 @@ const EntrenamientosAll = () => {
   useEffect(() => {
     const fetchEntrenamientos = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
+        
         
         const response = await fetch('http://localhost:8000/api/v1/entrenamientos', {
           headers: {
@@ -52,7 +53,7 @@ const EntrenamientosAll = () => {
   const handleSelectEntrenamiento = (entrenamientoId) => {
     setSelectedEntrenamiento(entrenamientoId);
   };
-
+//preguntar por esto!!!!
   const handleAsignarEntrenamiento = () => {
     if (selectedEntrenamiento) {
       navigate(`/asignar-entrenamiento/${selectedEntrenamiento}`);
@@ -66,12 +67,11 @@ const EntrenamientosAll = () => {
 
   return (
     <div className="container my-4">
-      <h2 className="mb-4">Selecciona un Entrenamiento</h2>
+      <h3 className="mb-4">Selecciona un Entrenamiento</h3>
 
       <div className="row">
         {entrenamientos.map((entrenamiento) => (
-          <li 
-            key={entrenamiento.id}
+          <div key={entrenamiento.id}
             className={selectedEntrenamiento === entrenamiento.id ? 'selected' : ''}
           >
             <button 
@@ -81,17 +81,17 @@ const EntrenamientosAll = () => {
               {entrenamiento.nombre}
               {entrenamiento.descripcion && <p>{entrenamiento.descripcion}</p>}
             </button>
-          </li>
+          </div>
         ))}
       </div>
 
-      <button 
-        onClick={handleAsignarEntrenamiento}
-        className="asignar-btn"
-        disabled={!selectedEntrenamiento}
-      >
+      <button onClick={handleAsignarEntrenamiento}className="asignar-btn"disabled={!selectedEntrenamiento}>
         Asignar Entrenamiento
       </button>
+      <button  onClick={() => navigate ('/entrenamientos/create')}  className='btn btn-success mt-3'>
+        Haz tu propia rutina
+      </button>
+
     </div>
   );
 };
