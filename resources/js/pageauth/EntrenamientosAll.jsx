@@ -11,7 +11,7 @@ const EntrenamientosAll = () => {
   useEffect(() => {
     const fetchEntrenamientos = async () => {
       try {
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         
         
         const response = await fetch('http://localhost:8000/api/v1/entrenamientos', {

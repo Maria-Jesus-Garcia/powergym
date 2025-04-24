@@ -26,6 +26,7 @@ class EjercicioController extends Controller
             'nombre'=> 'required|string|max:255',
             'descripcion'=> 'nullable|string',
             'tipo'=> 'required|string|max:50',
+            'grupo_muscular'=> 'required|string',
             'urlfoto'=> 'nullable|string|max:255',
         ]);
 
@@ -54,7 +55,7 @@ class EjercicioController extends Controller
         $ejercicio= Ejercicio::find($id);
 
         if(!$ejercicio){
-            return response()->json (['error'=> 'Ejercicio no encontrado']. 404);
+            return response()->json (['error'=> 'Ejercicio no encontrado'], 404);
         }
         $ejercicio->delete();
         return response()->json(['message'=>'Ejercicio eliminado'], 200);

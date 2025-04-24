@@ -15,12 +15,26 @@ const EntrenamientosStore = () => {
     
     //Para obtener ejercicios al cargar el componente
     useEffect(() =>{
-        const fetchEjercicios = async () => {
-            const response = await fetch('/api/ejercicios');
-            const data = await response.json();
+        const fetchEjercicios = async()=> {
+        try{
+            const response = await fetch ('http://localhost:8000/api/v1/ejercicios');
+            if(!response.ok){
+                console.error('Error en la API', response.status);
+                return;
+            }
+            const data= await response.json();
+            console.log('Ejercicios recibidos', data);
             setEjerciciosDisponibles(data);
-        };
-        fetchEjercicios();
+        }catch (error) {
+            console.error('Error al obtener ejercicios', error);
+        }
+        // const fetchEjercicios = async () => {
+            //     const response = await fetch('/api/ejercicios');
+            //     const data = await response.json();
+            //     setEjerciciosDisponibles(data);
+            //  };
+    }   
+    fetchEjercicios();
     }, []);
 
     const agregarEjercicio = (ejercicioId) => {
@@ -37,45 +51,50 @@ const EntrenamientosStore = () => {
     const submitStore = async(e) =>{
         e.preventDefault();
         //1)crear el entrenamiento
-        const token = sessionStorage.getItem('token');
+        const token = localStorage.getItem('token');
         //console.log("TOKEN ACTUAL", token);
+        try{
 
-        const entrenamientosResponse = await fetch('http://localhost:8000/api/v1/entrenamientos',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify({
-                nombre: nombreEntrenamiento,
-                usuario_id: localStorage.getItem('user_id'),
-                series: series,
-                repeticiones: repeticiones,
-                fecha: fechaSeleccionada,
-                ejercicios: ejerciciosSeleccionados.map(e => e.ejercicio_id),
+            const entrenamientosResponse = await fetch('http://localhost:8000/api/v1/entrenamientos',{
+             method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    nombre: nombreEntrenamiento,
+                    usuario_id: localStorage.getItem('user_id'),
+                    series: series,
+                    repeticiones: repeticiones,
+                    fecha: fechaSeleccionada,
+                    ejercicios: ejerciciosSeleccionados.map(e => e.ejercicio_id),
+                })
             })
-        })
-        const entrenamientosData = await entrenamientosResponse.json();
+            const entrenamientosData = await entrenamientosResponse.json();
+            console.log('Entrenamiento creado:', entrenamientosData);
 
         //2)Relacionar ejercicios (tabla pivote)
-        await Promise.all(
-            ejerciciosSeleccionados.map(ejercicio => 
-                fetch('/api/entrenamiento_ejercicios', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type':'application/json',
-                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({
-                        entrenamiento_id: entrenamientosData.id,
-                        ejercicios_id: ejercicio.ejercicio_id,
-                        series: ejercicio.series,
-                        repeticiones: ejercicio.repeticiones
+            await Promise.all(
+                ejerciciosSeleccionados.map(ejercicio => 
+                    fetch('http://localhost:8000/api/v1/entrenamientos/${entrenamientoData}/ejercicios', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type':'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({
+                            entrenamiento_id: entrenamientosData.id,
+                            ejercicios_id: ejercicio.ejercicio_id,
+                            series: ejercicio.series,
+                            repeticiones: ejercicio.repeticiones
+                        })
                     })
-                })
-            )
-        );
-        alert('Entrenamiento guardado');
+                )
+            );
+            alert('Entrenamiento guardado');
+        }catch(error) {
+            console.error ('Error al guardar el entrenamiento', error)
+        }
     }
 
 
@@ -92,7 +111,7 @@ const EntrenamientosStore = () => {
                 </div>
 
                 <div className='mb-3'>
-                    <label className='form.lable'>Añadir ejercicio</label>
+                    <label className='form-lable'>Añadir ejercicio</label>
                     <select className='form-select' onChange={(e) => agregarEjercicio( Number(e.target.value))}>
                         <option value="">Selecciona un ejercicio</option>
                         {ejerciciosDisponibles.map(ejercicio => ( <option key={ejercicio.id} value={ejercicio.id}>
