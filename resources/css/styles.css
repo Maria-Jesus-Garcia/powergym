@@ -1,0 +1,35 @@
+/* Estilos para las tarjetas tipo Post-it */
+
+
+.postit-card {
+    background-color: #fff8b3; /* Color tipo post-it amarillo suave */
+    border: 1px solid #f1f1f1;
+    border-radius: 15px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    height: 250px;
+    width: 100%;
+    overflow: hidden;
+    padding: 15px;
+  }
+  
+  .postit-card:hover {
+    transform: scale(1.03);
+    box-shadow: 4px 8px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .postit-card.border-primary {
+    border: 2px solid #007bff;
+  }
+  
+  .postit-card .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .postit-card .card-text {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  

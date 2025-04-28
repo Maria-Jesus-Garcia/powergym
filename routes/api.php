@@ -49,6 +49,9 @@ Route::prefix('v1')->group(function() {
         Route::put('/ejercicios/{id}', [EjercicioController::class, 'update']);
         Route::delete('/ejercicios/{id}', [EjercicioController::class, 'delete']);
 
+        //tabla pivote
+        Route::put('/entrenamientos/{id}/sync-ejercicios', [EntrenamientoController::class, 'syncEjercicios']);
+        Route::get('/entrenamientos/{id}/ejercicios', [EntrenamientoController::class, 'getEjercicios']);
         //::progresos
         Route::get('/progresos',[ProgresoController::class, 'index']);
         Route::get('/progresos/{id}',[ProgresoController::class, 'show']);

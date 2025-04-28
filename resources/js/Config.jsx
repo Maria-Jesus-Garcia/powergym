@@ -29,7 +29,63 @@ export default{
              throw error;  
          }
      },
+
     getEntrenamientosAll:()=> axios.get(`${base_api_url}/entrenamientos` ),
     getEntrenamientosStore: (data) => axios.get(`${base_api_url}/entrenamientos`, data ),
+    getEntrenamientoById: (id)=> {
+        const token = localStorage.getItem('token');
+        return axios.get(`${base_api_url}/entrenamientos/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            },
+            withCredentials: true
+        });
+    },
+    
+    // Obtener todos los ejercicios
+    getEjercicios: () => {
+        const token = localStorage.getItem('token');
+        return axios.get(`${base_api_url}/ejercicios`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            },
+            withCredentials: true
+        });
+    },
 
+// Obtener ejercicios de un entrenamiento específico
+    getEjerciciosPorEntrenamientos: (id) => {
+        const token = localStorage.getItem('token');
+        return axios.get(`${base_api_url}/entrenamientos/${id}/ejercicios`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            },
+            withCredentials: true
+        });
+    },
+// Actualizar entrenamiento
+    updateEntrenamiento: (id, data) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${base_api_url}/entrenamientos/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            },
+            withCredentials: true
+        });
+    },
+// Sincronizar ejercicios de un entrenamiento
+    syncEjercicios: (id, data) => {
+        const token = localStorage.getItem('token');
+        return axios.put(`${base_api_url}/entrenamientos/${id}/sync-ejercicios`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json'
+            },
+        withCredentials: true
+        });
+    }
 }

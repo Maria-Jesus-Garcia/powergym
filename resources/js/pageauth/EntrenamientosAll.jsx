@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+ 
+
 
 const EntrenamientosAll = () => {
   const [entrenamientos, setEntrenamientos] = useState([]);
@@ -62,37 +64,67 @@ const EntrenamientosAll = () => {
     }
   };
 
-  if (loading) return <div>Cargando entrenamientos...</div>;
+  if (loading) return /*<div>Cargando entrenamientos...</div>;*/<div class="spinner-border text-info" role="status">
+  <span className="visually-hidden">Loading...</span>
+</div>
   if (error) return <div>Error: {error}</div>;
+
+  const pastelColors = [
+    '#FFFA9E',  // Amarillo pastel
+    '#B5EAD7',  // Verde menta pastel
+    '#FFDAC1',  // Naranja pastel
+    '#C7CEEA',  // Azul pastel
+    '#FFC8DD',  // Rosa pastel
+    '#D5AAFF',  // Violeta pastel
+    '#F2B5D4',  // Rosa chicle pastel
+  ];
 
   return (
     <div className="container my-4">
-      <h3 className="mb-4">Selecciona un Entrenamiento</h3>
+    <h2 className="text-center text-dark fw-bold mb-4 fs-2">Selecciona un Entrenamiento</h2>
+  
+    <div className="row justify-content-center">
+      {entrenamientos.map((entrenamiento) => {
+        //Color aleatorio para las tarjetas
+        const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)]
+          return(
 
-      <div className="row">
-        {entrenamientos.map((entrenamiento) => (
-          <div key={entrenamiento.id}
-            className={selectedEntrenamiento === entrenamiento.id ? 'selected' : ''}
+        <div key={entrenamiento.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div 
+            className={`card postit-card h-100 ${selectedEntrenamiento === entrenamiento.id ? 'border-primary' : ''}`}
+            onClick={() => handleSelectEntrenamiento(entrenamiento.id)}
+            style={{ backgroundColor: randomColor, cursor: "pointer" }}
           >
-            <button 
-              onClick={() => handleSelectEntrenamiento(entrenamiento.id)}
-              className="entrenamiento-btn"
-            >
-              {entrenamiento.nombre}
-              {entrenamiento.descripcion && <p>{entrenamiento.descripcion}</p>}
-            </button>
+            <div className="card-body d-flex flex-column">
+              <h5 className="card-title">{entrenamiento.nombre}</h5>
+              {entrenamiento.descripcion && (
+                <p className="card-text">{entrenamiento.descripcion}</p>
+              )}
+              <div className="mt-auto">
+                <button 
+                  className="btn btn-outline-primary btn-sm w-100 mb-2"
+                  onClick={(e) => {
+                    e.stopPropagation(); // para que no dispare también seleccionar
+                    navigate(`/entrenamientos/${entrenamiento.id}/editar`);
+                  }}
+                >
+                  Editar
+                </button>
+              </div>
+            </div>
           </div>
-        ))}
-      </div>
-
-      <button onClick={handleAsignarEntrenamiento}className="asignar-btn"disabled={!selectedEntrenamiento}>
-        Asignar Entrenamiento
-      </button>
-      <button  onClick={() => navigate ('/entrenamientos/create')}  className='btn btn-success mt-3'>
-        Haz tu propia rutina
-      </button>
-
+        </div>
+        );
+      })}
     </div>
+      <div className="d-flex gap-3 mt-4 justify-context-center"></div>
+        <button onClick={handleAsignarEntrenamiento}className="btn btn-outline-primary btn-lg flex-grow-1"disabled={!selectedEntrenamiento}>
+          Asignar Entrenamiento
+        </button>
+        <button  onClick={() => navigate ('/entrenamientos/create')}  className='btn btn-outline-success btn-lg flex-grow-1'>
+          Haz tu propio entrenamiento
+        </button>
+      </div>
   );
 };
 

@@ -107,6 +107,32 @@ class EntrenamientoController extends Controller
         return response()->json(['message' => 'Ejercicio agregado']);
     }
 
+    public function syncEjercicios(Request $request, $id){
+        $entrenamiento = Entrenamiento::findOrFail($id);
+
+        $data =$request->validate([
+            'ejercicios' => 'required|array',
+            'ejercicios.*.ejercicio_id'=> 'required|exists:ejercicios,id',
+            'ejercicios.*.series' => 'required|integer|min:1',
+            'ejercicios.*.repeticiones' => 'required|integer|min:1',
+        ]);
+        $syncData = [];
+        foreach ($data['ejercicios'] as $ejercicio){
+            $syncData [$ejercicio['ejercicio_id']] = [
+                'series' => $ejercicio ['series'],
+                'repeticiones' => $ejercicio ['repeticiones']
+            ];
+        }
+        //sincroniza tabla pivote
+        $entrenamiento ->ejercicios()->sync($syncData);
+        return response()->json(['message'=> 'Ejercicios sincronizados correctamente']);
+    }
+    public function getEjercicios($id){
+        $entrenamiento = Entrenamiento::findOrFail($id);
+
+        return response()->json($entrenamiento->ejercicios()->withPivot('series', 'repeticiones')->get());
+    }
+
 
 
 }

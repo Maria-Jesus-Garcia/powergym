@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import '../css/styles.css';
 
 import LayoutPublic from './layouts/LayoutPublic';
 
@@ -12,6 +13,7 @@ import Register from './pageauth/Register';
 import Dashboard from './pageauth/Dashboard';
 import EntrenamientosAll from './pageauth/EntrenamientosAll';
 import EntrenamientosStore from './pageauth/EntrenamientosStore';
+import EntrenamientosUpdate from './pageauth/EntrenamientosUpdate';
 
 const App = () => {
     return(
@@ -24,6 +26,7 @@ const App = () => {
                     <Route path= '/dashboard' element={<Dashboard/>}/>
                     <Route path= '/entrenamientos' element={<EntrenamientosAll/>}/>
                     <Route path= '/entrenamientos/create' element= {<EntrenamientosStore/>}/>
+                    <Route path= 'entrenamientos/:id/editar' element= {<EntrenamientosUpdate/>}/>
                     
 
                 </Route>               

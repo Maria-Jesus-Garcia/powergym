@@ -211,38 +211,6 @@ const EntrenamientosStore = () => {
             </form>
         </div>
     );
-//     <div className="container bg-light">
-//         <div className='row'>
-//             <Sidebar/>
-//             <div className="col-sm-9 mt-3 mb-3">
-//                 <div className="card">
-//                     <div className="card-body">
-//                         <form onSubmit={submitStore}>
-//                             <div className="form-group row">
-//                                 <div className="col-sm-8">
-//                                     <label>Nombre</label>
-//                                     <input className="form-control" value={nombre} onChange={(e) => setNombreEntrenamiento(e.target.value)} type="text"/>
-//                                 </div>
-//                                 <div className="col-sm-8">
-//                                     <label>Series</label>
-//                                     <input className="form-control" value={series} onChange={(e) => setSeries(e.target.value)} type="number"/>
-//                                 </div>
-//                                 <div className="col-sm-8">
-//                                     <label>Repeticiones</label>
-//                                     <input className="form-control" value={repeticiones} onChange={(e) => setRepeticiones(e.target.value)} type="number"/>
-//                                 </div>
-//                             </div>
-//                             <div className="btn-group mt-3">
-//                                 <Link to={-1} className="btn btn-secondary">Back</Link>
-//                                 <button type='submit' className="btn btn-primary">Crear entrenamiento</button>
-//                             </div>
-//                         </form>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-      
-//     </div>
-//   );
+   
 }
 export default EntrenamientosStore;
