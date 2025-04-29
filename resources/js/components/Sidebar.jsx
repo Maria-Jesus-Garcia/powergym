@@ -4,24 +4,34 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = ()=> {
     return(
-        <div className="d-flex flex-colum flex-shrink-o p-3 bg-light" style={{ width: '200px', height: '100vh', 
-            backgroundColor: '#000', color:  '#fff', position:'fixed', top:60, left:0,
-            padding:'1.5rem', zIdex:1000, boxShadow: '2px 0 5px rgba(0,0,0,0.5', borderTopRightRadius:'10px'}}>
-            {/* <h5 className="text-black mb-4">Menú</h5> */}
-            
-            <div className="d-flex flex-column gap-3">
-                <div className="list-group">
-                    <NavLink to="/entrenamientos" 
-                    className="text-decoration-none p-3 bg-dark text-white rounded-3 shadow-sm">
-                        Entrenamientos</NavLink>
-                    <NavLink to="/progresos" 
-                    className="text-decoration-none p-3 bg-dark text-white rounded-3 shadow-sm">
-                        Progresos</NavLink>
-                    <NavLink to="/perfil" 
-                    className="text-decoration-none p-3 bg-dark text-white rounded-3 shadow-sm">
-                        Perfil</NavLink>     
-                </div>               
-            </div>
+        <div className=" border-end p-4 position-fixed shadow-sm"
+        style={{
+            width: '220px',
+            top: '60px', //ajustarlo con el navbar
+            left:0,
+            height: '100vh',
+            zIndex:1000,
+            borderTopRightRadius: '15px',
+            borderBottomRightRadius: '15px',
+            backgroundColor: '#fdfdfd'
+        }}>
+            {/* <h5 className='mb-4 text-center text-uppercase fw-bold' style= {{letterSpacing: '1px'}}>
+                PowerGym
+            </h5> */}
+            <nav className='nav flex-column gap-3'>
+                <NavLink to="/entrenamientos" className={({isActive}) => 
+                `nav-link rounded-3 px-2 py-4 fs-4 ${isActive? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
+                    Entrenamientos
+                </NavLink>
+                <NavLink to="/progresos" className={({isActive}) => 
+                `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
+                    Progresos
+                </NavLink>
+                <NavLink to="/perfil" className={({isActive}) => 
+                `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
+                    Perfil
+                </NavLink>
+            </nav>
         </div>
     );
 }
