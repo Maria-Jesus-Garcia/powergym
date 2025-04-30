@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\EntrenamientoController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\ProgresoController;
-
+use App\Models\Entrenamiento;
 
 Route::prefix('v1')->group(function() {
     //::PUBLIC
@@ -41,7 +41,8 @@ Route::prefix('v1')->group(function() {
         Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
         Route::post('/entrenamientos/{entrenamiento}/ejercicios',
         [EntrenamientoController::class, 'agregarEjercicio']);
-
+        Route::put('/entrenamientos/{id}/asignar', [EntrenamientoController::class, 'asignarAUsuario']);
+        Route::get('/entrenamientos/mi-entrenamiento', [EntrenamientoController::class, 'miEntrenamiento']);
         //::ejercicios
         Route::get('/ejercicios', [EjercicioController::class, 'index']);
         Route::get('/ejercicios/{id}', [EjercicioController::class, 'show']);

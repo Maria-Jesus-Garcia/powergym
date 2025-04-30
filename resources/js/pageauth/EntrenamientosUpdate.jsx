@@ -136,7 +136,7 @@ const EntrenamientosUpdate = () => {
                 <div className="col-md-9">
                     <div className="card shadow-sm">
                         <div className="card-header bg-primary text-white">
-                            <h2>Editar entrenamiento</h2>
+                            <h2 className="text-center m-0">Editar entrenamiento</h2>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>

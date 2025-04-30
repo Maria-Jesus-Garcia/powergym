@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 
 const EntrenamientosAll = () => {
-  const [entrenamientos, setEntrenamientos] = useState([]);
+  const [entrenamientos, setEntrenamientos] = useState([]); 
   const [selectedEntrenamiento, setSelectedEntrenamiento] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [busqueda, setBusqueda]= useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  console.log("Seleccionado:", selectedEntrenamiento);
   useEffect(() => {
     const fetchEntrenamientos = async () => {
       try {
@@ -38,7 +40,7 @@ const EntrenamientosAll = () => {
         }
 
         const data = await response.json();
-        setEntrenamientos(data);
+        setEntrenamientos(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error('Error completo:', err);
         setError(err.message.includes('Unexpected token')
@@ -64,7 +66,7 @@ const EntrenamientosAll = () => {
     }
   };
 
-  if (loading) return /*<div>Cargando entrenamientos...</div>;*/<div class="spinner-border text-info" role="status">
+  if (loading) return /*<div>Cargando entrenamientos...</div>;*/<div className="spinner-border text-info" role="status">
   <span className="visually-hidden">Loading...</span>
 </div>
   if (error) return <div>Error: {error}</div>;
@@ -78,53 +80,83 @@ const EntrenamientosAll = () => {
     '#D5AAFF',  // Violeta pastel
     '#F2B5D4',  // Rosa chicle pastel
   ];
+  if (!Array.isArray(entrenamientos)) {
+    console.error("Los entrenamientos no son un array:", entrenamientos);
+    return <div>Error en los datos de entrenamientos</div>;
+  }
+  const entrenamientosFiltrados = entrenamientos.filter((entrenamiento)=>
+  entrenamiento.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   return (
     <div className="container my-4">
     <h2 className="text-center text-dark fw-bold mb-4 fs-2">Selecciona un Entrenamiento</h2>
-  
+    <div className='mb-4'>
+      <input
+        type='text' className='form-control' placeholder="Buscar entrenamiento..." value={busqueda}
+        onChange= {(e)=> setBusqueda(e.target.value)}/>
+    </div>
     <div className="row justify-content-center">
-      {entrenamientos.map((entrenamiento) => {
+      {entrenamientosFiltrados.length === 0 && (
+        <p className='text-mted text-center'>No se encontraron entrenamientos.</p>
+      )}
+      {entrenamientosFiltrados.map((entrenamiento) => {
         //Color aleatorio para las tarjetas
         const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)]
-          return(
+          
+        return(
 
         <div key={entrenamiento.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
           <div 
-            className={`card postit-card h-100 ${selectedEntrenamiento === entrenamiento.id ? 'border-primary' : ''}`}
-            onClick={() => handleSelectEntrenamiento(entrenamiento.id)}
-            style={{ backgroundColor: randomColor, cursor: "pointer" }}
-          >
-            <div className="card-body d-flex flex-column">
-              <h5 className="card-title">{entrenamiento.nombre}</h5>
-              {entrenamiento.descripcion && (
-                <p className="card-text">{entrenamiento.descripcion}</p>
-              )}
-              <div className="mt-auto">
-                <button 
-                  className="btn btn-outline-primary btn-sm w-100 mb-2"
-                  onClick={(e) => {
-                    e.stopPropagation(); // para que no dispare también seleccionar
-                    navigate(`/entrenamientos/${entrenamiento.id}/editar`);
-                  }}
-                >
-                  Editar
-                </button>
+            className={`card postit-card h-100 ${selectedEntrenamiento === entrenamiento.id ? 'seleccionado' : ''}`} 
+            style= {{backgroundColor: randomColor, cursor: 'pointer'}}
+            onClick={()=> handleSelectEntrenamiento(entrenamiento.id)}>
+
+            <div className="card-inner">
+              <div className='card-front'>
+              
+                <h5 className="card-title">{entrenamiento.nombre}</h5>
+                  {entrenamiento.descripcion && (
+                  <p className="card-text">{entrenamiento.descripcion}</p>
+                  )}
+                  <div className="mt-auto">
+                      <button 
+                        className="btn btn-outline-primary btn-sm w-100 mb-2"
+                        onClick={(e) => {
+                        e.stopPropagation(); // para que no dispare también seleccionar
+                        navigate(`/entrenamientos/${entrenamiento.id}/editar`);
+                        }}>
+                      Editar
+                      </button>                   
+                  </div>              
               </div>
+            <div className='card-back p-3 d-flex flex-column'>
+              <h6>Ejercicios</h6>
+              <ul className='list-unstyled flex-grow-1'>
+                {entrenamiento.ejercicios?.map((ejer) =>(
+                  <li key={ejer.id}>• {ejer.nombre}</li>
+                ))}
+              </ul>
+              <button 
+                className="btn btn-outline-primary btn-sm w-100 mt-3"
+                onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/entrenamientos/${entrenamiento.id}/editar`);
+                }}>Editar</button>
+            </div>
             </div>
           </div>
         </div>
         );
       })}
     </div>
-      <div className="d-flex gap-3 mt-4 justify-context-center"></div>
-        <button onClick={handleAsignarEntrenamiento}className="btn btn-outline-primary btn-lg flex-grow-1"disabled={!selectedEntrenamiento}>
+       <div className="d-flex gap-3 mt-4 justify-context-center"></div>
+        <button onClick={handleAsignarEntrenamiento}
+          className="btn btn-outline-primary btn-lg "
+          disabled={!selectedEntrenamiento}>
           Asignar Entrenamiento
         </button>
-        <button  onClick={() => navigate ('/entrenamientos/create')}  className='btn btn-outline-success btn-lg flex-grow-1'>
-          Haz tu propio entrenamiento
-        </button>
-      </div>
+      </div> 
   );
 };
 

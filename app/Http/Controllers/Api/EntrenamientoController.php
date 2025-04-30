@@ -5,19 +5,22 @@ namespace App\Http\Controllers\Api;
 use App\Models\Entrenamiento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\MiEntrenamiento;
+use Illuminate\Support\Facades\Log;
+
 
 class EntrenamientoController extends Controller
 {
     //Listar entrenamientos
     public function index(){
-        $entrenamientos= Entrenamiento::all();
+        $entrenamientos= Entrenamiento::with('ejercicios')->get(); 
         return response()->json($entrenamientos, 200);
     }
 
     //Mostrar un entrenemaiento en específico
     public function show($id){ 
 
-        $entrenamiento= Entrenamiento::find($id);
+        $entrenamiento= Entrenamiento::with('ejercicios')->find($id); //$entrenamiento= Entrenamiento::find($id);
 
         if(!$entrenamiento){
             return response()->json(['error'=> 'Entrenamiento no encontrado'], 404);
@@ -131,6 +134,26 @@ class EntrenamientoController extends Controller
         $entrenamiento = Entrenamiento::findOrFail($id);
 
         return response()->json($entrenamiento->ejercicios()->withPivot('series', 'repeticiones')->get());
+    }
+    public function asignarAUsuario(Request $request, $id){
+        $entrenamiento= Entrenamiento::findOrFail($id);
+        $entrenamiento->usuario_id = $request->user()->id;
+        $entrenamiento->save();
+
+        return response()->json(['message' => 'Entrenamiento asignado']);
+    }
+    public function miEntrenamiento(Request $request){
+        Log::info('Usuario ID:', ['id' => $request->user()->id]);
+
+        $entrenamiento= Entrenamiento::with('ejercicios')
+            ->where('usuario_id', $request->user()->id)
+            ->latest()
+            ->first();
+            if (!$entrenamiento){
+                return response()->json(['message'=> 'No tienes entrenamientos'], 404);
+            }
+            return response()->json($entrenamiento);
+
     }
 
 

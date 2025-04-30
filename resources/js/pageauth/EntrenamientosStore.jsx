@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Sidebar from '../components/Sidebar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const EntrenamientosStore = () => {
@@ -11,6 +11,8 @@ const EntrenamientosStore = () => {
     const [series, setSeries] = useState(0);
     const [repeticiones, setRepeticiones] = useState(0);
     const [fechaSeleccionada, setFechaSeleccionada]= useState(new Date().toISOString());
+    const [busquedaEjercicio, setBusquedaEjercicio] = useState('');
+    const navigate = useNavigate();
     
     
     //Para obtener ejercicios al cargar el componente
@@ -85,9 +87,6 @@ const EntrenamientosStore = () => {
             }))
         };
 
-        console.log('Datos a enviar:', dataToSend); // Para debug
-
-
 
             const entrenamientosResponse = await fetch('http://localhost:8000/api/v1/entrenamientos',{
              method: 'POST',
@@ -149,68 +148,121 @@ const EntrenamientosStore = () => {
                 
 
                 alert('Entrenamiento guardado correctamente');
+                navigate('/entrenamientos')
             } catch (error) { //añado este catch
                 console.error('Error al guardar el entrenamiento:', error);
                 alert(`Error al guardar: ${error.message}`);
             }
     }
+    const ejerciciosFiltrados= ejerciciosDisponibles.filter(e =>
+        e.nombre.toLowerCase().includes(busquedaEjercicio.toLowerCase())
+    );
 
 
     return (
-        <div className='container mt-4'>
+        <div className='container fluid mt-4'>
             {/* /*<Sidebar />*/ }
-            <h2>Crear un nuevo entrenamiento</h2>
-            <form onSubmit={submitStore}>
-
-                <div className='mb-3'>
-                    <label className='form-label'>Nombre del entrenamiento</label>
-                    <input type='text' className='form-control' value={nombreEntrenamiento}
-                    onChange={(e) => setNombreEntrenamiento(e.target.value)} required />
+            <h2 className='text-center mb-4'>Crear un nuevo entrenamiento</h2>
+            <div className='row'>
+                {/* Columna izquierda: ejercicios disponibles */}
+                <div className='col-md-8'>
+                    <h4>Ejercicios disponibles</h4>
+                    <input 
+                    type= 'text'
+                    className='form-control mb-3'
+                    placeholder='Buscar ejercicio...'
+                    value={busquedaEjercicio}
+                    onChange={(e) => setBusquedaEjercicio(e.target.value)}/>
+                    <div className='row'>
+                        {ejerciciosFiltrados.length > 0 ? (
+                            ejerciciosFiltrados.map((ejercicio)=> {
+                                const seleccionado = ejerciciosSeleccionados.some(e => e.ejercicio_id === ejercicio.id);
+                                return(
+                                    <div key={ejercicio.id} className=' col-6 col-md-4 mb-3'>
+                                        <div className='card h-100 postit-card'
+                                        style={{
+                                            backgroundColor: seleccionado ? '#d1fae5' : '#fef3c7',
+                                            cursor: 'pointer',
+                                        }}
+                                        onClick={() => agregarEjercicio(ejercicio.id)}>
+                                            <img 
+                                            src= {ejercicio.urlfoto}
+                                            className='card-img-top'
+                                            alt={ejercicio.nombre}
+                                            style={{height: '150px', objectFit: 'cover'}}/>
+                                            <div className='card-body'>
+                                        <h5 className='card-title text-center'>{ejercicio.nombre}</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                );
+                            })
+                            ):(
+                                <p className='text-muted text-center'>No se encontraron ejercicios.</p>
+                        )}                           
+                    </div>
                 </div>
-
-                <div className='mb-3'>
-                    <label className='form-lable'>Añadir ejercicio</label>
-                    <select className='form-select' onChange={(e) => agregarEjercicio( Number(e.target.value))}>
-                        <option value="">Selecciona un ejercicio</option>
-                        {ejerciciosDisponibles.map(ejercicio => ( <option key={ejercicio.id} value={ejercicio.id}>
-                            {ejercicio.nombre}</option>
-
+                {/* Columna derecha: ejercicios seleccionados */}
+                <div className='col-md-4'>
+                    <div className='mb-3'>
+                        <label className='form-label'>Nombre del entrenamiento</label>
+                        <input
+                        type="text"
+                        className='form-control'
+                        value={nombreEntrenamiento}
+                        onChange={(e) => setNombreEntrenamiento(e.target.value)} required />
+                    </div>
+                    {/* <button type="submit" onClick={submitStore} className='btn btn-success w-100'>Guardar entrenamiento</button> */}
+                    <h4>Ejercicios seleccionados</h4>
+                    <ul className='list-group mb-3'>
+                        {ejerciciosSeleccionados.map((item, index)=> (
+                            <li key= {index} className='list-group-item'>
+                                <strong>{item.nombre}</strong>
+                                <div className='col-5'>
+                                    <label className='form-label'>Series</label>
+                                    <input 
+                                    type= "number"
+                                    className='form-control'
+                                    min= "1"
+                                    value={item.series}
+                                    onChange= {(e)=> {
+                                        const nuevas = [...ejerciciosSeleccionados];
+                                        nuevas[index].series =e.target.value;
+                                        setEjerciciosSeleccionados(nuevas);
+                                    }}/>                                  
+                                </div>
+                                <div className='col-5'>
+                                    <label className='form-label'>Reps</label>
+                                    <input
+                                    type= "number"
+                                    className='form-control'
+                                    min="1"
+                                    value={item.repeticiones}
+                                    onChange={(e) =>{
+                                        const nuevas = [... ejerciciosSeleccionados];
+                                        nuevas[index].repeticiones = e.target.value;
+                                        setEjerciciosSeleccionados(nuevas);
+                                    }}/>
+                                </div>
+                                <div className='col-2 d-flex align-items-center'>
+                                    <button
+                                    type="button"
+                                    className='btn btn-sm btn-danger'
+                                    onClick={()=> 
+                                        setEjerciciosSeleccionados((prev)=>
+                                        prev.filter((_, i) => i !==index)
+                                    )
+                                    }>✕</button>
+                                </div>
+                            </li>
                         ))}
-                    </select>
+                    </ul>
+                    <button type="submit" onClick={submitStore} className='btn btn-success w-100'>Guardar entrenamiento</button>
+
                 </div>
-
-                <div className='row mb-3'>
-                    <div className='col'>
-                        <label className='form-label'>Series</label>
-                        <input type= "number" className='form-control' value={series}
-                        onChange={(e) => setSeries(e.target.value)} min="1" />
-
-                    </div>
-                    <div className="col">
-                        <label className="form-label">Repeticiones</label>
-                        <input type="number" className="form-control" value={repeticiones}
-                        onChange={(e) => setRepeticiones(e.target.value)} min="1"/>
-                    </div>
-                </div>
-                <ul className="list-group mb-3">
-                    {ejerciciosSeleccionados.map((item, index) => (
-                        <li key={index} className="list-group-item d-flex justify-content-between">
-                            <span>
-                                {item.nombre} - {item.series}x{item.repeticiones}
-                            </span>
-                            <button type="button" className="btn btn-sm btn-danger"
-                            onClick={() =>{setEjerciciosSeleccionados(prev => 
-                                prev.filter((_, i) => i !== index) //filtra el array
-                              );
-                            }}>Eliminar</button>
-                        </li>
-                    ))}
-                </ul>
-
-                <button type="submit" className="btn btn-primary">Guardar Entrenamiento</button>
-            </form>
-        </div>
-    );
-   
-}
+            </div>
+        </div> 
+    )  
+ }
+                    
 export default EntrenamientosStore;

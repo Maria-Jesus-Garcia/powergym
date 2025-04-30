@@ -23,10 +23,18 @@ const Sidebar = ()=> {
                 `nav-link rounded-3 px-2 py-4 fs-4 ${isActive? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
                     Entrenamientos
                 </NavLink>
+                <NavLink to="/entrenamientos/create" className={({isActive}) => 
+                `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
+                    Crealo
+                </NavLink>
+                <NavLink to="/mi-entrenamiento" className={({isActive}) => 
+                `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
+                    Mi entrenamiento
+                </NavLink>
                 <NavLink to="/progresos" className={({isActive}) => 
                 `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
                     Progresos
-                </NavLink>
+                </NavLink>               
                 <NavLink to="/perfil" className={({isActive}) => 
                 `nav-link rounded-3 px-2 py-4 fs-4 ${isActive ? 'bg-primary text-white fw-bold shadow-sm' : 'bg-secondary-subtle text-dark'}`}>
                     Perfil

@@ -14,6 +14,8 @@ import Dashboard from './pageauth/Dashboard';
 import EntrenamientosAll from './pageauth/EntrenamientosAll';
 import EntrenamientosStore from './pageauth/EntrenamientosStore';
 import EntrenamientosUpdate from './pageauth/EntrenamientosUpdate';
+import AsignarEntrenamiento from './pageauth/AsignarEntrenamiento';
+import MiEntrenamiento from './pageauth/MiEntrenamiento';
 
 const App = () => {
     return(
@@ -26,9 +28,9 @@ const App = () => {
                     <Route path= '/dashboard' element={<Dashboard/>}/>
                     <Route path= '/entrenamientos' element={<EntrenamientosAll/>}/>
                     <Route path= '/entrenamientos/create' element= {<EntrenamientosStore/>}/>
-                    <Route path= 'entrenamientos/:id/editar' element= {<EntrenamientosUpdate/>}/>
-                    
-
+                    <Route path= '/entrenamientos/:id/editar' element= {<EntrenamientosUpdate/>}/>
+                    <Route path= '/asignar-entrenamiento/:id' element= {<AsignarEntrenamiento/>}/>
+                    <Route path="/mi-entrenamiento" element={<MiEntrenamiento />} />
                 </Route>               
             </Routes>
         </Router>
