@@ -89,11 +89,13 @@ const EntrenamientosAll = () => {
   );
 
   return (
-    <div className="container my-4">
+    <div className="container my-5">
     <h2 className="text-center text-dark fw-bold mb-4 fs-2">Selecciona un Entrenamiento</h2>
     <div className='mb-4'>
       <input
-        type='text' className='form-control' placeholder="Buscar entrenamiento..." value={busqueda}
+        type='text' className='form-control shadow-sm' 
+        placeholder="Buscar entrenamiento..." 
+        value={busqueda}
         onChange= {(e)=> setBusqueda(e.target.value)}/>
     </div>
     <div className="row justify-content-center">
@@ -107,17 +109,16 @@ const EntrenamientosAll = () => {
         return(
 
         <div key={entrenamiento.id} className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div className='card-flip'>
           <div 
             className={`card postit-card h-100 ${selectedEntrenamiento === entrenamiento.id ? 'seleccionado' : ''}`} 
             style= {{backgroundColor: randomColor, cursor: 'pointer'}}
             onClick={()=> handleSelectEntrenamiento(entrenamiento.id)}>
-
-            <div className="card-inner">
-              <div className='card-front'>
-              
-                <h5 className="card-title">{entrenamiento.nombre}</h5>
+            <div className='card-inner'>
+              <div className="card-front" style={{ backgroundColor: randomColor }}>                          
+                <h5 className="card-title text-center">{entrenamiento.nombre}</h5>
                   {entrenamiento.descripcion && (
-                  <p className="card-text">{entrenamiento.descripcion}</p>
+                  <p className="card-text ">{entrenamiento.descripcion}</p>
                   )}
                   <div className="mt-auto">
                       <button 
@@ -130,29 +131,32 @@ const EntrenamientosAll = () => {
                       </button>                   
                   </div>              
               </div>
-            <div className='card-back p-3 d-flex flex-column'>
-              <h6>Ejercicios</h6>
+            <div className='card-back'>
+              <h6 className='text-center'>Ejercicios</h6>
               <ul className='list-unstyled flex-grow-1'>
                 {entrenamiento.ejercicios?.map((ejer) =>(
                   <li key={ejer.id}>• {ejer.nombre}</li>
                 ))}
               </ul>
+              <div className='text-center mt-2'>
               <button 
                 className="btn btn-outline-primary btn-sm w-100 mt-3"
                 onClick={(e) => {
                 e.stopPropagation();
                 navigate(`/entrenamientos/${entrenamiento.id}/editar`);
                 }}>Editar</button>
+              </div>
             </div>
             </div>
+          </div>
           </div>
         </div>
         );
       })}
     </div>
-       <div className="d-flex gap-3 mt-4 justify-context-center"></div>
+       <div className="d-flex justify-context-center"></div>
         <button onClick={handleAsignarEntrenamiento}
-          className="btn btn-outline-primary btn-lg "
+          className="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
           disabled={!selectedEntrenamiento}>
           Asignar Entrenamiento
         </button>

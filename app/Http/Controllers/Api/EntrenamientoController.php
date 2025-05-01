@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Entrenamiento;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -142,20 +143,54 @@ class EntrenamientoController extends Controller
 
         return response()->json(['message' => 'Entrenamiento asignado']);
     }
-    public function miEntrenamiento(Request $request){
-        Log::info('Usuario ID:', ['id' => $request->user()->id]);
+    // public function miEntrenamiento(Request $request){
+    //     Log::info('Usuario ID:', ['id' => $request->user()->id]);
 
-        $entrenamiento= Entrenamiento::with('ejercicios')
-            ->where('usuario_id', $request->user()->id)
+    //     $entrenamiento= Entrenamiento::with('ejercicios')
+    //         ->where('usuario_id', $request->user()->id)
+    //         ->has('ejercicios')
+    //         ->latest()
+    //         ->first();
+    //         if (!$entrenamiento){
+    //             return response()->json(['message'=> 'No tienes entrenamientos'], 404);
+    //         }
+    //         return response()->json($entrenamiento);
+
+    // }
+    //   public function MiEntrenamiento(Request $request)
+    //     {
+    //    Log::info('Usuario ID:', ['id' => $request->user()->id]);
+
+    //       $entrenamiento = Entrenamiento::with('ejercicios')
+    //           ->where('usuario_id', $request->user()->id)
+    //           ->latest()
+    //           ->first();
+
+    //           Log::info('Usuario ID:', ['id' => $request->user()->id]);
+
+        
+
+    //    if (!$entrenamiento) {
+    //           return response()->json(['message' => 'No tienes entrenamientos'], 404);
+    //       }
+
+    //       return response()->json($entrenamiento);
+    //    }
+    public function entrenamientoAsignadoUsuario(Request $request)
+    {
+        Log::info('Llamada a entrenamientoAsignadoUsuario');
+
+        $userId = $request->user()->id;
+
+        $entrenamiento = Entrenamiento::with('ejercicios')
+            ->where('usuario_id', $userId)
             ->latest()
             ->first();
-            if (!$entrenamiento){
-                return response()->json(['message'=> 'No tienes entrenamientos'], 404);
-            }
-            return response()->json($entrenamiento);
 
+        if (!$entrenamiento) {
+            return response()->json(['message' => 'No tienes entrenamientos'], 404);
+        }
+
+        return response()->json($entrenamiento);
     }
-
-
-
 }

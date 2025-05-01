@@ -4,13 +4,13 @@ import Sidebar from "../components/Sidebar";
 const MiEntrenamiento = () => {
   const [entrenamiento, setEntrenamiento] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchEntrenamiento = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8000/api/v1/entrenamientos/mi-entrenamiento", {
-            method: 'Get',
+        const response = await fetch("http://localhost:8000/api/v1/entrenamientos/asignado", {
+            //method: 'GET',
             headers: {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
@@ -34,7 +34,7 @@ const MiEntrenamiento = () => {
   return (
     <div className="container-fluid">
       <div className="row">
-        <Sidebar />
+        <div> <Sidebar /> </div>
         <div className="col-md-9 p-4">
           {loading ? (
             <p>Cargando entrenamiento...</p>

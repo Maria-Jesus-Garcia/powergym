@@ -28,7 +28,7 @@
   
   
   .postit-card:hover {
-    transform: scale(1.03);
+    transform: translateY (-5px);
     box-shadow: 4px 8px 12px rgba(0, 0, 0, 0.3);
   }
   .postit-card:hover .card-inner {
@@ -76,21 +76,22 @@
     padding: 1rem;
     border-radius: 1rem;
     display:flex;
-    flex-direction: colum;
+    flex-direction: column;
     justify-content: space-between;
   }
   
   .card-front {
     z-index: 2;
-    transform: rotateY(odeg);
+    transform: rotateY(0deg);
   }
   
   .card-back {
     transform: rotateY(180deg);
-    background-color: #fff;
     overflow-y: auto;
     z-index: 1;
+    background-color: #fff;
   }
+  
   .card-title, .card-text {
     overflow: hidden;
     text-overflow: ellipsis;

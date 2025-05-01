@@ -16,6 +16,7 @@ import EntrenamientosStore from './pageauth/EntrenamientosStore';
 import EntrenamientosUpdate from './pageauth/EntrenamientosUpdate';
 import AsignarEntrenamiento from './pageauth/AsignarEntrenamiento';
 import MiEntrenamiento from './pageauth/MiEntrenamiento';
+import Perfil from './pageauth/Perfil';
 
 const App = () => {
     return(
@@ -30,7 +31,8 @@ const App = () => {
                     <Route path= '/entrenamientos/create' element= {<EntrenamientosStore/>}/>
                     <Route path= '/entrenamientos/:id/editar' element= {<EntrenamientosUpdate/>}/>
                     <Route path= '/asignar-entrenamiento/:id' element= {<AsignarEntrenamiento/>}/>
-                    <Route path="/mi-entrenamiento" element={<MiEntrenamiento />} />
+                    <Route path= '/mi-entrenamiento' element={<MiEntrenamiento />} />
+                    <Route path= '/perfil' element ={<Perfil/>} />
                 </Route>               
             </Routes>
         </Router>

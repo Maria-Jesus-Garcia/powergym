@@ -60,20 +60,19 @@ const AsignarEntrenamiento = () =>{
 
     return(
         
-        <div className="container fluid">  
-            <div className="row">   
-            <Sidebar/> 
-                <div className="col-md-9">     
-                <div className="card shadow p-4 round-4" style={{backgroundColor: '#fef9e7'}}>           
-                <h2 className="fw-bold text-primary mb-3">{entrenamiento.nombre}</h2>
-                {/* <p className="mb-2"><strong>Series:</strong> {entrenamiento.series}</p>
-                <p className="mb-4"><strong>Repeticiones:</strong> {entrenamiento.repeticiones}</p>
-             */}
+        <div className="container fluid py-5">  
+            <div className="row justify-content-center">   
+            {/* <Sidebar/>  */}
+                <div className="col-md-10 col-lg-8">     
+                <div className="card shadow- rounded-4 border-0" 
+                style={{backgroundColor: '#fef9e7', paddin:'2rem'}}>           
+                <h2 className="text-center text-primary fw-bold mb-4">{entrenamiento.nombre}</h2>
+                
                 <h4 className="text-secondary mb-3">Ejercicios:</h4>
-                <ul className="list-group">
+                <ul className="list-group mb-4">
                     {entrenamiento.ejercicios?.length?(
                         entrenamiento.ejercicios.map((ej) => (
-                            <li key={ej.id} className="list-group-item">
+                            <li key={ej.id} className="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
                                     <strong>{ej.nombre}</strong>
                                     <span className="text-muted ms-2"> - {ej.pivot.series} series x {ej.pivot.repeticiones} repeticiones</span>
@@ -84,16 +83,19 @@ const AsignarEntrenamiento = () =>{
                         <li className="list-group-item text-muted fst-italic">No hay ejercicios asignados</li>
                     )}    
                 </ul>
-                <div className="mt-5 text-center">
-                    <button className="btn btn-lg px-4"
+                <div className="text-center">
+                    <button className="btn btn-lg px-5 py-2"
                     onClick={handleAsignar}
                     style={{
-                        backgroundColor: '#C7CEEA',
+                        backgroundColor: '#c7ceea',
                         color:'#333',
                         border: 'none',
-                        borderRadius: '0.75rem',
+                        borderRadius: '2rem',
                         boxShadow: '2px 4px 8px rgba(0,0,0,0.2)',
-                    }}>Asignar rutina</button>
+                        transitin: 'all 0.2s ease-in-out'
+                    }}
+                    onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
+                    onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}>Asignar rutina</button>
                 </div>
                 </div>
                 </div> 

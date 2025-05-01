@@ -39,10 +39,9 @@ Route::prefix('v1')->group(function() {
         Route::delete('/entrenamientos/{id}', [EntrenamientoController::class, 'delete']);
         // añadido despues
         Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
-        Route::post('/entrenamientos/{entrenamiento}/ejercicios',
-        [EntrenamientoController::class, 'agregarEjercicio']);
+        Route::post('/entrenamientos/{entrenamiento}/ejercicios', [EntrenamientoController::class, 'agregarEjercicio']);
         Route::put('/entrenamientos/{id}/asignar', [EntrenamientoController::class, 'asignarAUsuario']);
-        Route::get('/entrenamientos/mi-entrenamiento', [EntrenamientoController::class, 'miEntrenamiento']);
+        Route::get('/entrenamientos/asignado', [EntrenamientoController::class, 'entrenamientoAsignadoUsuario']);
         //::ejercicios
         Route::get('/ejercicios', [EjercicioController::class, 'index']);
         Route::get('/ejercicios/{id}', [EjercicioController::class, 'show']);
@@ -67,63 +66,3 @@ Route::prefix('v1')->group(function() {
 
 });
 
-
-/*Route::prefix('v1')->group(function(){
-
-    /////// PUBLIC
-         //::public
-    Route::get('/public/ejercicios', [GeneralController::class, 'listarEjercicios']);
-    Route::get('/public/ejercicio/{slug}', [GeneralController::class, 'ejercicio']);
-    Route::get('/public/entrenamientos', [GeneralController::class, 'listarEntrenamientos']);
-    Route::get('/public/entrenamientos/{slug}', [GeneralController::class, 'entrenamiento']);
-
-           //::auth 
-           */
-    //Route::post('/auth/register', [AuthController::class, 'register']);
-     /*
-    Route::post('/auth/login', [AuthController::class, 'login']);
-           //crear recursos
-    Route::post('/auth/entrenamiento{id}', [AuthController::class, 'crearEntreno']);
-         //modificar recursos
-    Route::put('/auth/entrenamiento{id}', [AuthController::class], 'modificarEntreno');
-          //Eliminar recurso
-
-
-    /////// PRIVATE
-
-    Route::group(['middleware'=> 'auth:sanctum'], function(){
-        //::auth
-        Route::post('/auth/logout', [AuthController::class, 'logout']);
-
-
-    });
-
-});*/
-
-
-
-/*
-
-//Rutas de la API.
-Route::middleware('auth:sanctm')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
-
-
-
-
-/*Route::get('/lista_usuarios', [ListaUsuarioController::class, 'index']);
-Route::get('/lista_usuarios/{id}', [ListaUsuarioController::class, 'show']);
-Route::post('/lista_usuarios', [ListaUsuarioController::class, 'almacenar'] );
-
-Route::put('/lista_usuarios/{id}', [ListaUsuarioController::class,
-'actualizar']);
-Route::patch('/lista_usuarios/{id}', [ListaUsuarioController::class,
-'actualizarParcialmente']);
-Route::delete('/lista_usuarios/{id}', [ListaUsuarioController::class,
-'eliminar']);
-Route::post('register', [AuthController::class, 'register']); //Registro
-usuario
-Route::post('login', [AuthController::class, 'login']); //Inicio de sesión
-Route::post('logout', [AuthController::class, 'logout']); //cerrar sesión */
