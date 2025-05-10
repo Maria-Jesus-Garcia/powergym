@@ -9,8 +9,12 @@ use App\Http\Controllers\Api\EntrenamientoController;
 use App\Http\Controllers\Api\EjercicioController;
 use App\Http\Controllers\ProgresoController;
 use App\Models\Entrenamiento;
+use Illuminate\Support\Facades\Log;
+
+
 
 Route::prefix('v1')->group(function() {
+    Log::info('🧪 Laravel está cargando api.php');
     //::PUBLIC
     Route::post('/auth/register', [AuthController::class, 'register']);
     Route::post ('/auth/login', [AuthController::class, 'login']);
@@ -38,10 +42,11 @@ Route::prefix('v1')->group(function() {
         Route::put('/entrenamientos/{id}', [EntrenamientoController::class, 'update']);
         Route::delete('/entrenamientos/{id}', [EntrenamientoController::class, 'delete']);
         // añadido despues
-        Route::post('/entrenamientos', [EntrenamientoController::class, 'store']);
         Route::post('/entrenamientos/{entrenamiento}/ejercicios', [EntrenamientoController::class, 'agregarEjercicio']);
-        Route::put('/entrenamientos/{id}/asignar', [EntrenamientoController::class, 'asignarAUsuario']);
-        Route::get('/entrenamientos/asignado', [EntrenamientoController::class, 'entrenamientoAsignadoUsuario']);
+        Route::post('/entrenamientos/user/{id}/asignar', [EntrenamientoController::class, 'asignarAUsuario']);
+        Route::get('/entrenamientos/user/asignado', [EntrenamientoController::class, 'entrenamientoAsignadoUsuario']);
+        
+
         //::ejercicios
         Route::get('/ejercicios', [EjercicioController::class, 'index']);
         Route::get('/ejercicios/{id}', [EjercicioController::class, 'show']);
@@ -59,10 +64,13 @@ Route::prefix('v1')->group(function() {
         Route::put('/progresos/{id}', [ProgresoController::class, 'update']);
         Route::delete('/progresos/{id}', [ProgresoController::class, 'delete']);
 
-
+    
     });
-
-
+    
+    Route::get('/v1/test-log', function () {
+        Log::info('✅ Entró a /v1/test-log');
+        return response()->json(['ok' => true]);
+    });
 
 });
 

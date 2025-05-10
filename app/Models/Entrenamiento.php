@@ -17,8 +17,10 @@ class Entrenamiento extends Model
         return $this->belongsToMany(Ejercicio::class, 'entrenamiento_ejercicio')
                 ->withPivot(['series', 'repeticiones']);
     }
-    public function usuario() //antes tenia user
+    public function usuarios() //antes tenia user
     {
-        return $this->belongsTo (User::class, 'usuario_id'); //belongTo, relacion de muchos a uno
+        return $this->belongsToMany(User::class, 'entrenamiento_user') //belongTo, relacion de muchos a uno
+            //->withPivot(['series', 'repeticiones'])
+            ->withTimestamps();
     }
 }

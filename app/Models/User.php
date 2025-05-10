@@ -51,7 +51,9 @@ class User extends Authenticatable
         ];
     }
     public function entrenamientos(){
-        return $this->hasOne(Entrenamiento::class, 'usuario_id'); //un usuario tiene un entrenamiento
+        return $this->belongsToMany(Entrenamiento::class, 'entrenamiento_user', 'user_id', 'entrenamiento_id') //un usuario tiene un entrenamiento
+            //->withPivot(['series', 'repeticiones'])
+            ->withTimestamps();
     }
     public function progresos(){
         return $this->hasMany(Progreso::class, 'usuario_id'); //un usuario tiene muchos progresos

@@ -137,60 +137,37 @@ class EntrenamientoController extends Controller
         return response()->json($entrenamiento->ejercicios()->withPivot('series', 'repeticiones')->get());
     }
     public function asignarAUsuario(Request $request, $id){
+        $user= $request->user();
         $entrenamiento= Entrenamiento::findOrFail($id);
-        $entrenamiento->usuario_id = $request->user()->id;
-        $entrenamiento->save();
+        
+        $user->entrenamientos()->syncWithoutDetaching([$entrenamiento->id]);
 
         return response()->json(['message' => 'Entrenamiento asignado']);
     }
-    // public function miEntrenamiento(Request $request){
-    //     Log::info('Usuario ID:', ['id' => $request->user()->id]);
-
-    //     $entrenamiento= Entrenamiento::with('ejercicios')
-    //         ->where('usuario_id', $request->user()->id)
-    //         ->has('ejercicios')
-    //         ->latest()
-    //         ->first();
-    //         if (!$entrenamiento){
-    //             return response()->json(['message'=> 'No tienes entrenamientos'], 404);
-    //         }
-    //         return response()->json($entrenamiento);
-
-    // }
-    //   public function MiEntrenamiento(Request $request)
-    //     {
-    //    Log::info('Usuario ID:', ['id' => $request->user()->id]);
-
-    //       $entrenamiento = Entrenamiento::with('ejercicios')
-    //           ->where('usuario_id', $request->user()->id)
-    //           ->latest()
-    //           ->first();
-
-    //           Log::info('Usuario ID:', ['id' => $request->user()->id]);
-
-        
-
-    //    if (!$entrenamiento) {
-    //           return response()->json(['message' => 'No tienes entrenamientos'], 404);
-    //       }
-
-    //       return response()->json($entrenamiento);
-    //    }
     public function entrenamientoAsignadoUsuario(Request $request)
     {
-        Log::info('Llamada a entrenamientoAsignadoUsuario');
+        
+        $user = $request->user();
+    
+        
+        if (!$user) {
+            return response()->json(['message' => 'No autenticado'], 401);
+        }
 
-        $userId = $request->user()->id;
-
-        $entrenamiento = Entrenamiento::with('ejercicios')
-            ->where('usuario_id', $userId)
-            ->latest()
+        $entrenamiento = $user->entrenamientos()
+            ->with(['ejercicios' => function ($query) {
+                $query->withPivot(['series', 'repeticiones']);
+            }])
+            ->latest('entrenamiento_user.created_at')  // Método más limpio
             ->first();
 
         if (!$entrenamiento) {
-            return response()->json(['message' => 'No tienes entrenamientos'], 404);
+            return response()->json([], 200);  // Devuelve array vacío en lugar de 404
         }
 
         return response()->json($entrenamiento);
     }
+
+    
+    
 }

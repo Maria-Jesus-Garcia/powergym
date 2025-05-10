@@ -38,8 +38,8 @@ const AsignarEntrenamiento = () =>{
     const handleAsignar = async() =>{
         try{
            const token = localStorage.getItem('token');
-           const response = await fetch(`http://localhost:8000/api/v1/entrenamientos/${id}/asignar`, {
-            method: 'Put',
+           const response = await fetch(`http://localhost:8000/api/v1/entrenamientos/user/${id}/asignar`, {
+            method: 'POST',
             headers: {
                 Authorization:`Bearer ${token}`,
                 Accept: 'application/json',

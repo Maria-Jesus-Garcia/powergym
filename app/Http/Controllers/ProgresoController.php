@@ -27,7 +27,7 @@ class ProgresoController extends Controller
     //crear registro de progreso
     public function store(Request $request){
         $request->validate([ //validamos
-            'usuario_id'=> 'required|exists:users,id',
+            //'usuario_id'=> 'required|exists:users,id',
             'peso_actual'=> 'required|numeric',
             'peso_objetivo'=> 'required|numeric',
             'fecha'=> 'required|date',
@@ -35,7 +35,7 @@ class ProgresoController extends Controller
 
 
         $progreso = Progreso::create([ //creamos
-            'usuario_id'=>$request->usuario_id,
+            'usuario_id'=>$request->user()->id, //'usuario_id'=>$request->usuario_id,
             'peso_actual'=> $request->peso_actual,
             'peso_objetivo'=> $request->peso_objetivo,
             'fecha'=> $request->fecha,
