@@ -29,7 +29,6 @@ class ProgresoController extends Controller
         $request->validate([ //validamos
             //'usuario_id'=> 'required|exists:users,id',
             'peso_actual'=> 'required|numeric',
-            'peso_objetivo'=> 'required|numeric',
             'fecha'=> 'required|date',
         ]);
 
@@ -37,7 +36,6 @@ class ProgresoController extends Controller
         $progreso = Progreso::create([ //creamos
             'usuario_id'=>$request->user()->id, //'usuario_id'=>$request->usuario_id,
             'peso_actual'=> $request->peso_actual,
-            'peso_objetivo'=> $request->peso_objetivo,
             'fecha'=> $request->fecha,
         ]);
         return response()->json($progreso, 201);
@@ -50,12 +48,10 @@ class ProgresoController extends Controller
         }
         $request->validate([
             'peso_actual'=> 'required|numeric',
-            'peso_objetivo'=> 'required|numeric',
             'fecha'=> 'required|date',
         ]);
         $progreso->update([
             'peso_actual'=> $request->peso_actual,
-            'peso_objetivo'=> $request->peso_objetivo,
             'fecha'=> $request->fecha,
         ]);
         return response()->json($progreso); //retorno de progreso actualizado

@@ -42,7 +42,6 @@ const ProgresoGrafica =() => {
                 body: JSON.stringify({
                     //usuario_id: null, 
                     peso_actual: nuevoPeso,
-                    peso_objetivo: pesoObjetivo,
                     fecha: fecha
                 }),
             });
