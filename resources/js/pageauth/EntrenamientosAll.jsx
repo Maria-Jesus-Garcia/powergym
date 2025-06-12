@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
  
 
 
@@ -89,20 +90,27 @@ const EntrenamientosAll = () => {
   );
 
   return (
-    <div className="container my-5">
-    <h2 className="text-center text-dark fw-bold mb-4 fs-2">Selecciona un Entrenamiento</h2>
-    <div className='mb-4'>
-      <input
-        type='text' className='form-control shadow-sm' 
-        placeholder="Buscar entrenamiento..." 
-        value={busqueda}
-        onChange= {(e)=> setBusqueda(e.target.value)}/>
-    </div>
-    <div className="row justify-content-center">
-      {entrenamientosFiltrados.length === 0 && (
-        <p className='text-mted text-center'>No se encontraron entrenamientos.</p>
-      )}
-      {entrenamientosFiltrados.map((entrenamiento) => {
+    <div className="container-fluid">
+      <div className="row">
+
+      {/* Sidebar */}
+      <div className="col-md-3 col-lg-2 px-0">
+        <Sidebar />
+      </div>
+      <div className="col-md-9 col-lg-10 px-4 py-5">
+        <h2 className="text-center text-dark fw-bold mb-4 fs-2">Selecciona un Entrenamiento</h2>
+        <div className='mb-4'>
+          <input
+          type='text' className='form-control shadow-sm' 
+          placeholder="Buscar entrenamiento..." 
+          value={busqueda}
+          onChange= {(e)=> setBusqueda(e.target.value)}/>
+        </div>
+        <div className="row justify-content-center">
+          {entrenamientosFiltrados.length === 0 && (
+          <p className='text-mted text-center'>No se encontraron entrenamientos.</p>
+          )}
+          {entrenamientosFiltrados.map((entrenamiento) => {
         //Color aleatorio para las tarjetas
         const randomColor = pastelColors[Math.floor(Math.random() * pastelColors.length)]
           
@@ -154,13 +162,17 @@ const EntrenamientosAll = () => {
         );
       })}
     </div>
-       <div className="d-flex justify-context-center"></div>
+       <div className="d-flex justify-context-center">
         <button onClick={handleAsignarEntrenamiento}
           className="btn btn-outline-primary btn-lg px-4 rounded-pill shadow-sm"
           disabled={!selectedEntrenamiento}>
           Asignar Entrenamiento
         </button>
-      </div> 
+        </div> 
+      </div>
+      </div>
+  </div>
+
   );
 };
 

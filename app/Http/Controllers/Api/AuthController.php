@@ -38,30 +38,23 @@ class AuthController extends Controller
             return response()->json($response, 200);
         }
         $input =$request->all();
-       // $input["password"]=bcrypt($input['password']);
+       
 
         // Crear el nuevo usuario
         $user = User::create([
             'nombre' => $request->nombre,
-            //'apellido' => $request->apellido,
             'email' => $request->email,
             'edad' => $request->edad,
             'peso_actual' => $request->peso_actual,
             'peso_objetivo' => $request->peso_objetivo,
-            'contraseña' => Hash::make($request->contraseña), // Hashear la contraseña
+            'contraseña' => Hash::make($request->contraseña), // Encripta la contraseña
         ]);
 
-        // Responder con un mensaje de éxito
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
-
-        
+        return response()->json(['message' => 'El usuario ha sido registrado con éxito'], 201);       
     }
     
 
     public function login(Request $request){
-          
-
-          // Validación de entrada
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -72,14 +65,12 @@ class AuthController extends Controller
             return response()->json(["error" => $validator->errors()], 422);
         }
 
-    // Verificar credenciales con el guard api
+    
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->contraseña, $user->contraseña)) {
             return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
-
-    // Crear token con Sanctum
 
         $token = $user->createToken('token_acceso')->plainTextToken;
 
@@ -96,7 +87,7 @@ class AuthController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message'=> 'Sesión cerrada correctamente'
+            'message'=> 'Sesión cerrada'
         ]);
     }
     

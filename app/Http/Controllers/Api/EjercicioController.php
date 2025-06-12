@@ -9,7 +9,7 @@ use App\Models\Ejercicio;
 class EjercicioController extends Controller
 {
     public function index(){
-        // return response()->json(Ejercicio::all(), 200); //solo tenia esto
+        
         try {
             $ejercicios = Ejercicio::all();
             return response()->json($ejercicios);
@@ -36,7 +36,7 @@ class EjercicioController extends Controller
             'urlfoto'=> 'nullable|string|max:255',
         ]);
 
-        //crear ejercicio
+        //Para crear ejercicio
         $ejercicio=Ejercicio::create($request->all());
         return response()->json($ejercicio, 201);
     }
@@ -61,9 +61,9 @@ class EjercicioController extends Controller
         $ejercicio= Ejercicio::find($id);
 
         if(!$ejercicio){
-            return response()->json (['error'=> 'Ejercicio no encontrado'], 404);
+            return response()->json (['error'=> 'El ejercicio no se ha encontrado'], 404);
         }
         $ejercicio->delete();
-        return response()->json(['message'=>'Ejercicio eliminado'], 200);
+        return response()->json(['message'=>'El ejercicio se ha eliminado'], 200);
     }
 }

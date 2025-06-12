@@ -21,7 +21,7 @@ class EntrenamientoController extends Controller
     //Mostrar un entrenemaiento en específico
     public function show($id){ 
 
-        $entrenamiento= Entrenamiento::with('ejercicios')->find($id); //$entrenamiento= Entrenamiento::find($id);
+        $entrenamiento= Entrenamiento::with('ejercicios')->find($id); 
 
         if(!$entrenamiento){
             return response()->json(['error'=> 'Entrenamiento no encontrado'], 404);
@@ -31,16 +31,16 @@ class EntrenamientoController extends Controller
 
     //Crear un nuevo entrenamiento
     public function store(Request $request){
-        $validated= $request->validate([ //aqui tenia $request->validate([
+        $validated= $request->validate([ 
             'nombre'=> 'required|string|max:255',
-            'usuario_id'=> 'nullable|exists:users,id',//cambié esto por nullable para probar crear rutina
+            'usuario_id'=> 'nullable|exists:users,id',
             'series'=> 'required|integer',
             'repeticiones'=> 'required|integer',
             'fecha'=> 'required|date',
             'ejercicios'=>'required|array', 
             'ejercicios.*.ejercicio_id'=> 'required|exists:ejercicios,id',
-            'ejercicios.*.series' => 'integer|min:1', //añado esto
-            'ejercicios.*.repeticiones' => 'integer|min:1' //añado esto
+            'ejercicios.*.series' => 'integer|min:1', 
+            'ejercicios.*.repeticiones' => 'integer|min:1' 
         ]);
         //crear el entrenamiento
         $datos = $request->only(['nombre', 'series', 'repeticiones', 'fecha']);
@@ -58,7 +58,7 @@ class EntrenamientoController extends Controller
         $entrenamiento=Entrenamiento::find($id);
 
         if(!$entrenamiento){
-            return response()->json(['error'=> 'Entrenamiento no encontrado']);
+            return response()->json(['error'=> 'El entrenamiento no se ha encontrado']);
         }
 
         $request->validate([
@@ -89,14 +89,14 @@ class EntrenamientoController extends Controller
         $entrenamiento =Entrenamiento::find($id);
 
         if(!$entrenamiento){
-            return response()->json(['error'=> 'Entrenamiento no encontrado'], 404);
+            return response()->json(['error'=> 'Es entrenamiento no se ha encontrado'], 404);
         }
 
         $entrenamiento->delete();
-        return response()->json(['message'=>'Entrenamiento eliminado'], 200);
+        return response()->json(['message'=>'El entrenamiento se haeliminado'], 200);
     }
 
-    public function agregarEjercicio(Request $request, Entrenamiento $entrenamiento){ //añadido despues
+    public function agregarEjercicio(Request $request, Entrenamiento $entrenamiento){
         $validated = $request->validate([
             'ejercicio_id' => 'required|exists:ejercicios,id',
             'series' => 'integer',
@@ -108,7 +108,7 @@ class EntrenamientoController extends Controller
             'repeticiones' => $validated['repeticiones']
         ]);
 
-        return response()->json(['message' => 'Ejercicio agregado']);
+        return response()->json(['message' => 'El ejercicio se ha agregado']);
     }
 
     public function syncEjercicios(Request $request, $id){
@@ -158,7 +158,7 @@ class EntrenamientoController extends Controller
             ->with(['ejercicios' => function ($query) {
                 $query->withPivot(['series', 'repeticiones']);
             }])
-            ->latest('entrenamiento_user.created_at')  // Método más limpio
+            ->latest('entrenamiento_user.created_at')  // Hace que el método sea más limpio
             ->first();
 
         if (!$entrenamiento) {

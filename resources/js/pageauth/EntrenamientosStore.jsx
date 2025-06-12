@@ -161,9 +161,13 @@ const EntrenamientosStore = () => {
 
     return (
         <div className='container fluid mt-4'>
-            {/* /*<Sidebar />*/ }
-            <h2 className='text-center mb-4'>Crear un nuevo entrenamiento</h2>
             <div className='row'>
+                <div className="col-md-3 col-lg-2">
+                    <Sidebar />
+                </div>
+                <div className='col-md-9 col-lg-10'>
+                    <h2 className='text-center mb-4'>Crear un nuevo entrenamiento</h2>
+                    <div className='row'>
                 {/* Columna izquierda: ejercicios disponibles */}
                 <div className='col-md-8'>
                     <h4>Ejercicios disponibles</h4>
@@ -254,11 +258,13 @@ const EntrenamientosStore = () => {
                                     )
                                     }>✕</button>
                                 </div>
+                            
                             </li>
                         ))}
                     </ul>
                     <button type="submit" onClick={submitStore} className='btn btn-success w-100'>Guardar entrenamiento</button>
-
+                    </div>
+                    </div>
                 </div>
             </div>
         </div> 

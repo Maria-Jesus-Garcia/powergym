@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 class ProgresoController extends Controller
 {
     //Mostrar
-    public function index(){
-        $progresos= Progreso::all();
+    public function index(Request $request){
+        // $progresos= Progreso::all();
+        // return response()->json($progresos);
+            $user = $request->user();
+        $progresos = $user->progresos()->orderBy('fecha')->get(); // ordenado por fecha
         return response()->json($progresos);
     }
 
